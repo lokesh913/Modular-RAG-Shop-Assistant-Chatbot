@@ -89,7 +89,7 @@ def sync_with_pinecone(data):
                 'ProductName': row['ProductName'],
                 'ProductBrand': row['ProductBrand'],
                 'Gender': row['Gender'],
-                'Price': row['Price'],
+                'Price': float(row['Price']) if row['Price'] is not None else 0.0,
                 'PrimaryColor': row['PrimaryColor'],
                 'Description': row['Description'],
             }
