@@ -45,11 +45,11 @@ embed_model = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001", 
 def fetch_data():
     # connect to MySQL
     db_connection = mysql.connector.connect(
-        host=os.getenv("DB_HOST", "localhost"),
-        user=os.getenv("DB_USER", "root"),
-        password=os.getenv("DB_PASSWORD"),
-        database=os.getenv("DB_NAME", "assistant_chatbot"),
-        port=int(os.getenv("DB_PORT", 3306))
+        host=os.getenv("MYSQLHOST", "localhost"),
+        user=os.getenv("MYSQLUSER", "root"),
+        password=os.getenv("MYSQLPASSWORD", os.getenv("DB_PASSWORD")),
+        database=os.getenv("MYSQLDATABASE", "assistant_chatbot"),
+        port=int(os.getenv("MYSQLPORT", "3306"))
     )
     cursor = db_connection.cursor()
 
@@ -64,7 +64,7 @@ def fetch_data():
 
 
 def sync_with_pinecone(data):
-    batch_size = 15
+    batch_size = 100
     total_batches = (len(data) + batch_size - 1) // batch_size
 
     for i in tqdm(range(0, len(data), batch_size), desc="Processing Batches", unit='batch', total=total_batches):
@@ -89,7 +89,7 @@ def sync_with_pinecone(data):
                 'ProductName': row['ProductName'],
                 'ProductBrand': row['ProductBrand'],
                 'Gender': row['Gender'],
-                'Price': float(row['Price']) if row['Price'] is not None else 0.0,
+                'Price': row['Price'],
                 'PrimaryColor': row['PrimaryColor'],
                 'Description': row['Description'],
             }
@@ -100,9 +100,6 @@ def sync_with_pinecone(data):
         with tqdm(total=len(ids), desc="Upserting Vectors", unit='vector') as upsert_vector:
             index.upsert(vectors=list(zip(ids, embeds, metadata)))
             upsert_vector.update(len(ids))
-
-        # Sleep to comply with Google GenAI Free Tier Rate Limits (100 requests per minute)
-        time.sleep(6)
 
 
 def main():

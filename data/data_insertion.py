@@ -12,27 +12,14 @@ data = pd.read_csv(csv_file)
 
 # connect to MySQL
 db_connection = mysql.connector.connect(
-    host=os.getenv("DB_HOST", "localhost"),
-    user=os.getenv("DB_USER", "root"),
-    password=os.getenv("DB_PASSWORD"),
-    database=os.getenv("DB_NAME", "assistant_chatbot"),
-    port=int(os.getenv("DB_PORT", 3306))
+    host=os.getenv("MYSQLHOST", "localhost"),
+    user=os.getenv("MYSQLUSER", "root"),
+    password=os.getenv("MYSQLPASSWORD", os.getenv("DB_PASSWORD")),
+    database=os.getenv("MYSQLDATABASE", "assistant_chatbot"),
+    port=int(os.getenv("MYSQLPORT", "3306"))
 )
 
 cursor = db_connection.cursor()
-
-# Auto-create table if not exists for plug-and-play seeding
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS products (
-    ProductID INT PRIMARY KEY,
-    ProductName VARCHAR(255) NOT NULL,
-    ProductBrand VARCHAR(255),
-    Gender VARCHAR(50),
-    Price DECIMAL(10, 2),
-    Description TEXT,
-    PrimaryColor VARCHAR(50)
-)
-""")
 
 
 for index, row in data.iterrows():
