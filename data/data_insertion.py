@@ -21,6 +21,19 @@ db_connection = mysql.connector.connect(
 
 cursor = db_connection.cursor()
 
+# Auto-create table if not exists for plug-and-play seeding
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS products (
+    ProductID INT PRIMARY KEY,
+    ProductName VARCHAR(255) NOT NULL,
+    ProductBrand VARCHAR(255),
+    Gender VARCHAR(50),
+    Price DECIMAL(10, 2),
+    Description TEXT,
+    PrimaryColor VARCHAR(50)
+)
+""")
+
 
 for index, row in data.iterrows():
     sql = """
