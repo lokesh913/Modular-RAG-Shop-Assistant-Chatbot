@@ -1,9 +1,5 @@
 import streamlit as st
 import requests
-import os
-
-BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
-
 
 st.set_page_config(page_title="🛍️ Shop Assistant", layout="wide")
 
@@ -142,7 +138,7 @@ with st.sidebar.form(key='chat_form', clear_on_submit=True):
 
 if submit_button and user_query.strip():
     try:
-        res = requests.post(f"{BACKEND_URL}/chat", json={
+        res = requests.post("http://localhost:8000/chat", json={
             "query": user_query,
             "history": st.session_state.chat_history
         })
@@ -164,7 +160,7 @@ st.markdown("<hr>", unsafe_allow_html=True)
 
 # Fetch product data from backend
 try:
-    response = requests.get(f"{BACKEND_URL}/products")
+    response = requests.get("http://localhost:8000/products")
     products = response.json()
 
     if not products:
