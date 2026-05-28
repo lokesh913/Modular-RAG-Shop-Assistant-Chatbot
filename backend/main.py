@@ -1,0 +1,19 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from backend.routes import chat, products
+
+app = FastAPI(title="Shop Assistant API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(chat.router)
+app.include_router(products.router)
+
+@app.get("/")
+def root():
+    return {"status": "ok", "message": "Shop Assistant API is running"}
