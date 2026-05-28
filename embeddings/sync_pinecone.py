@@ -43,13 +43,12 @@ embed_model = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001", 
 
 
 def fetch_data():
-    # connect to MySQL
     db_connection = mysql.connector.connect(
-        host=os.getenv("MYSQLHOST", "localhost"),
-        user=os.getenv("MYSQLUSER", "root"),
+        host=os.getenv("MYSQLHOST", os.getenv("DB_HOST", "localhost")),
+        user=os.getenv("MYSQLUSER", os.getenv("DB_USER", "root")),
         password=os.getenv("MYSQLPASSWORD", os.getenv("DB_PASSWORD")),
-        database=os.getenv("MYSQLDATABASE", "assistant_chatbot"),
-        port=int(os.getenv("MYSQLPORT", "3306"))
+        database=os.getenv("MYSQLDATABASE", os.getenv("DB_NAME", "assistant_chatbot")),
+        port=int(os.getenv("MYSQLPORT", os.getenv("DB_PORT", "3306")))
     )
     cursor = db_connection.cursor()
 
