@@ -197,6 +197,42 @@ To verify system connectivity, check the following endpoints:
 
 ---
 
+## 🌐 Cloud Deployment Guide
+
+This project is fully structured to support cloud deployments. Below are step-by-step instructions to launch the stack online using popular hosting platforms.
+
+### ⚡ Autopilot Features: Schema & Data Seeding
+We have built a custom lifespan startup hook in the FastAPI backend. **When deployed to the cloud, the backend automatically detects if your MySQL table is empty. It will create the table schema and seed all 129 product records from `data/shop-product-catalog.csv` automatically!** You do not need to manually import database dumps.
+
+### Method 1: Hybrid Platforms (Free Tier Friendly 🌟)
+
+#### 1. Host MySQL Database Online
+* Go to [Railway](https://railway.app/) or [Aiven](https://aiven.io/).
+* Create a free **MySQL** database instance.
+* Note down the host address, port, username, password, and database name.
+
+#### 2. Host FastAPI Backend on Render or Railway
+* Create a new Web Service pointing to your GitHub repository.
+* Set the build command to install dependencies or point the service to utilize the modern `backend.Dockerfile`.
+* Configure the following **Environment Variables**:
+  * `MYSQLHOST`: Your cloud database host address.
+  * `MYSQLUSER`: Your database username.
+  * `MYSQLPASSWORD`: Your database password.
+  * `MYSQLDATABASE`: Your database name.
+  * `MYSQLPORT`: Your database port (usually `3306`).
+  * `GOOGLE_API_KEY`: Your Google Gemini API Key.
+  * `PINECONE_API_KEY`: Your Pinecone Vector DB API Key.
+* Railway/Render will assign a public domain to your backend (e.g. `https://your-api.up.railway.app` or `https://your-api.onrender.com`).
+
+#### 3. Host Streamlit Frontend on Streamlit Community Cloud
+* Go to [Streamlit Community Cloud](https://streamlit.io/cloud) and click **"New App"**.
+* Select your GitHub repository, branch `main`, and set the main file path to `frontend/app.py`.
+* In the Advanced settings, add the following **Environment Variable**:
+  * `BACKEND_URL`: `https://your-deployed-api-url.onrender.com` (use your deployed backend URL).
+* Click **Deploy!** Your app is now live with a public address!
+
+---
+
 ## 🛡️ License
 
 This project is open-source and available under the [MIT License](LICENSE).

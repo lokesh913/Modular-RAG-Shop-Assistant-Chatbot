@@ -12,10 +12,11 @@ data = pd.read_csv(csv_file)
 
 # connect to MySQL
 db_connection = mysql.connector.connect(
-    host='localhost',
-    user='root',
-    password=os.getenv('DB_PASSWORD'),
-    database='assistant_chatbot'
+    host=os.getenv("MYSQLHOST", "localhost"),
+    user=os.getenv("MYSQLUSER", "root"),
+    password=os.getenv("MYSQLPASSWORD", os.getenv("DB_PASSWORD")),
+    database=os.getenv("MYSQLDATABASE", "assistant_chatbot"),
+    port=int(os.getenv("MYSQLPORT", "3306"))
 )
 
 cursor = db_connection.cursor()
