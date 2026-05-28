@@ -64,7 +64,7 @@ def fetch_data():
 
 
 def sync_with_pinecone(data):
-    batch_size = 100
+    batch_size = 15
     total_batches = (len(data) + batch_size - 1) // batch_size
 
     for i in tqdm(range(0, len(data), batch_size), desc="Processing Batches", unit='batch', total=total_batches):
@@ -100,6 +100,9 @@ def sync_with_pinecone(data):
         with tqdm(total=len(ids), desc="Upserting Vectors", unit='vector') as upsert_vector:
             index.upsert(vectors=list(zip(ids, embeds, metadata)))
             upsert_vector.update(len(ids))
+
+        # Sleep to comply with Google GenAI Free Tier Rate Limits (100 requests per minute)
+        time.sleep(6)
 
 
 def main():
