@@ -6,8 +6,9 @@ load_dotenv()
 
 def get_db_connection():
     return mysql.connector.connect(
-        host='localhost',
-        user='root',
+        host=os.getenv("DB_HOST", "localhost"),
+        user=os.getenv("DB_USER", "root"),
         password=os.getenv("DB_PASSWORD"),
-        database='assistant_chatbot'
+        database=os.getenv("DB_NAME", "assistant_chatbot"),
+        port=int(os.getenv("DB_PORT", 3306))
     )
