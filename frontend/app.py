@@ -131,21 +131,28 @@ for msg in st.session_state.chat_history:
             <div class="chat-bubble-assistant">{text}</div>
         """, unsafe_allow_html=True)
 
-# User input
-with st.sidebar:
-    user_query = st.text_input("Your question:", key="user_query")
-    if st.button("Send"):
-        if user_query.strip():
-            try:
-                res = requests.post("http://localhost:8000/chat", json={
-                    "query": user_query,
-                    "history": st.session_state.chat_history
-                })
-                data = res.json()
-                st.session_state.chat_history = data["history"]
-                st.rerun()
-            except Exception as e:
-                st.sidebar.error(f"❌ API Error: {e}")
+# User input form to automatically clear input on submit
+with st.sidebar.form(key='chat_form', clear_on_submit=True):
+    user_query = st.text_input("Your question:")
+    submit_button = st.form_submit_button("Send", use_container_width=True)
+
+if submit_button and user_query.strip():
+    try:
+        res = requests.post("http://localhost:8000/chat", json={
+            "query": user_query,
+            "history": st.session_state.chat_history
+        })
+        data = res.json()
+        st.session_state.chat_history = data["history"]
+        st.rerun()
+    except Exception as e:
+        st.sidebar.error(f"❌ API Error: {e}")
+
+# Reset Chat History button
+st.sidebar.markdown("<div style='margin-top: 15px;'></div>", unsafe_allow_html=True)
+if st.sidebar.button("🗑️ Reset Chat History", use_container_width=True):
+    st.session_state.chat_history = []
+    st.rerun()
 
 # ---- Main Page ----
 st.title("🛒 Shop Product Catalog")
