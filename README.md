@@ -8,9 +8,11 @@
 
 An ultra-modern, high-performance **Modular RAG (Retrieval-Augmented Generation)** conversational shop assistant. It integrates a **FastAPI** backend endpoint, **Streamlit** frontend interface, a relational **MySQL** database for metadata/queries, and **Pinecone Vector Search DB** alongside **Gemini 2.5 Flash** for powerful semantic retrieval and intelligent agentic customer responses.
 
-## 📸 Application Preview
+---
 
-![Application Preview](assets/screenshot.png)
+## 📸 Interface Preview
+
+![Modular RAG Chatbot Dark Mode Interface](assets/screenshot.png)
 
 ---
 

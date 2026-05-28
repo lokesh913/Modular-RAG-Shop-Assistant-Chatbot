@@ -1,14 +1,9 @@
-import os
 import uvicorn
 
 
 def main():
-    """Launch the backend API server with dynamic host and port binding."""
-    host = os.getenv("HOST", "0.0.0.0")
-    port = int(os.getenv("PORT", "8000"))
-    # Disable reload in production environment (when PORT is specified by a cloud host)
-    reload = os.getenv("PORT") is None
-    uvicorn.run("backend.main:app", host=host, port=port, reload=reload)
+    """Launch the backend API server."""
+    uvicorn.run("backend.main:app", host="127.0.0.1", port=8000, reload=True)
 
 
 if __name__ == "__main__":
