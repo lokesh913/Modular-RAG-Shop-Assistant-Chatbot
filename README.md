@@ -1,5 +1,7 @@
 # 🛍️ Modular RAG Shop Assistant Chatbot
 
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://modular-rag-shop-assistant-chatbot.streamlit.app/)
+
 [![Python Version](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.136+-green.svg)](https://fastapi.tiangolo.com/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.45+-red.svg)](https://streamlit.io/)
@@ -8,6 +10,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 An ultra-modern, high-performance **Modular RAG (Retrieval-Augmented Generation)** conversational shop assistant. It integrates a **FastAPI** backend endpoint, **Streamlit** frontend interface, a relational **MySQL** database for metadata/queries, and **Pinecone Vector Search DB** alongside **Gemini 2.5 Flash** for powerful semantic retrieval and intelligent agentic customer responses.
+
+> 🌐 **Try it live:** [modular-rag-shop-assistant-chatbot.streamlit.app](https://modular-rag-shop-assistant-chatbot.streamlit.app/)
 
 ---
 
@@ -265,34 +269,7 @@ To verify system connectivity, check the following endpoints:
 2. **Product Catalog Fetch**: `GET http://localhost:8000/products` returns all seeded MySQL rows as a list.
 3. **Chat Response**: `POST http://localhost:8000/chat` with body `{"query": "Do you have White Adidas shoes?"}` queries Pinecone, retrieves matching items, sends the formatted prompt context to Gemini 2.5 Flash, and returns an expert response seamlessly.
 
----
 
-## 🌐 Deployment Options
-
-To deploy this project online for live access (e.g., for recruiters or portfolio demonstrations):
-
-### Option 1: Streamlit Community Cloud *(Free — Recommended)*
-- Merge backend logic into the Streamlit app for a single-service deployment
-- Replace local MySQL with a free cloud database ([TiDB Cloud](https://tidbcloud.com/), [PlanetScale](https://planetscale.com/), or [Aiven](https://aiven.io/))
-- Deploy at [share.streamlit.io](https://share.streamlit.io) — get a permanent `*.streamlit.app` URL
-- Pinecone & Gemini APIs work out-of-the-box from cloud
-
-### Option 2: Render.com *(Free Tier)*
-- Deploy FastAPI backend and Streamlit frontend as **two separate web services**
-- Use a free-tier cloud MySQL provider for the database
-- Services auto-sleep after 15 min of inactivity on free tier
-
-### Option 3: Railway.app *(~$5/month)*
-- Built-in **managed MySQL** database — no external DB setup needed
-- Supports multiple services from a single project dashboard
-- Offers custom domain support for professional URLs
-
-### Option 4: Google Cloud Run *(Free Tier Available)*
-- Containerized serverless deployment using Docker
-- Generous free-tier limits for low-traffic portfolio projects
-- Professional `*.run.app` URLs
-
-> **Note**: All cloud deployment options require replacing the `localhost` MySQL connection in `backend/db/mysql.py` with cloud database credentials, and setting API keys as environment variables in the hosting platform's dashboard.
 
 ---
 
