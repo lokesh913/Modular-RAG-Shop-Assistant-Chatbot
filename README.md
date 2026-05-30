@@ -1,6 +1,6 @@
 # 🛍️ Modular RAG Shop Assistant Chatbot
 
-[![Python Version](https://img.shields.io/badge/Python-3.14+-blue.svg)](https://www.python.org/)
+[![Python Version](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.136+-green.svg)](https://fastapi.tiangolo.com/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.45+-red.svg)](https://streamlit.io/)
 [![Pinecone](https://img.shields.io/badge/Pinecone-Vector_DB-blueviolet.svg)](https://www.pinecone.io/)
@@ -28,7 +28,7 @@ An ultra-modern, high-performance **Modular RAG (Retrieval-Augmented Generation)
 | **Backend API** | FastAPI + Uvicorn | RESTful API with auto-generated docs |
 | **Frontend** | Streamlit | Interactive UI with premium dark-mode design |
 | **Package Manager** | uv | Fast Python dependency management |
-| **Language** | Python 3.14+ | Core application language |
+| **Language** | Python 3.12+ | Core application language |
 
 ---
 
@@ -78,11 +78,16 @@ Modular-RAG-Shop-Assistant-Chatbot/
 ├── .devcontainer/                # GitHub Codespaces configuration
 │   └── devcontainer.json         # Auto-setup for cloud dev environments
 │
+├── .streamlit/                   # Streamlit theme configuration
+│   └── config.toml               # Dark mode theme settings
+│
 ├── main.py                       # Root FastAPI server entry point launcher
+├── streamlit_app.py              # ☁️ Streamlit Cloud deployment entry point
+├── requirements.txt              # Cloud deployment dependencies
 ├── pyproject.toml                # Project dependencies & UV environment configs
 ├── uv.lock                       # Deterministic lockfile for Python environment
 ├── .gitignore                    # Production-grade Git ignore definitions
-├── .python-version               # Python version specification (3.14)
+├── .python-version               # Python version specification (3.12)
 └── README.md                     # Project documentation (You are here!)
 ```
 
@@ -130,7 +135,7 @@ Follow these step-by-step instructions to get your local environment configured 
 
 ### 1. Prerequisites
 
-Ensure you have **Python 3.14+** installed. We highly recommend using [**uv**](https://github.com/astral-sh/uv) (a fast Python package installer and resolver) to manage dependencies effortlessly.
+Ensure you have **Python 3.12+** installed. We highly recommend using [**uv**](https://github.com/astral-sh/uv) (a fast Python package installer and resolver) to manage dependencies effortlessly.
 
 ### 2. Download the Kaggle Dataset
 

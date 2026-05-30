@@ -1,0 +1,10 @@
+# Streamlit Cloud deployment dependencies
+# (Subset of pyproject.toml — excludes FastAPI, MySQL, and other local-only packages)
+streamlit
+google-genai
+langchain
+langchain-google-genai
+langchain-pinecone
+pinecone
+pandas
+python-dotenv
