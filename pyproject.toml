@@ -1,7 +1,7 @@
 [project]
 name = "modular-rag-shop-assistant-chatbot"
 version = "0.1.0"
-description = "Add your description here"
+description = "A modular RAG (Retrieval-Augmented Generation) shop assistant chatbot powered by Gemini 2.5 Flash, Pinecone Vector DB, MySQL, FastAPI, and Streamlit."
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [

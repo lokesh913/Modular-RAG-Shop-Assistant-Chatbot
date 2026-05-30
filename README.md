@@ -5,6 +5,7 @@
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.45+-red.svg)](https://streamlit.io/)
 [![Pinecone](https://img.shields.io/badge/Pinecone-Vector_DB-blueviolet.svg)](https://www.pinecone.io/)
 [![Gemini 2.5 Flash](https://img.shields.io/badge/Gemini-2.5_Flash-orange.svg)](https://deepmind.google/technologies/gemini/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 An ultra-modern, high-performance **Modular RAG (Retrieval-Augmented Generation)** conversational shop assistant. It integrates a **FastAPI** backend endpoint, **Streamlit** frontend interface, a relational **MySQL** database for metadata/queries, and **Pinecone Vector Search DB** alongside **Gemini 2.5 Flash** for powerful semantic retrieval and intelligent agentic customer responses.
 
@@ -13,6 +14,21 @@ An ultra-modern, high-performance **Modular RAG (Retrieval-Augmented Generation)
 ## 📸 Interface Preview
 
 ![Modular RAG Chatbot Dark Mode Interface](assets/screenshot.png)
+
+---
+
+## 🧰 Tech Stack
+
+| Layer | Technology | Purpose |
+|-------|-----------|---------|
+| **LLM** | Google Gemini 2.5 Flash | Conversational AI response generation |
+| **Embeddings** | Gemini Embedding 001 (768-dim) | Dense semantic vector embeddings |
+| **Vector DB** | Pinecone (Serverless, AWS) | Similarity search & semantic retrieval |
+| **Relational DB** | MySQL | Structured product catalog storage |
+| **Backend API** | FastAPI + Uvicorn | RESTful API with auto-generated docs |
+| **Frontend** | Streamlit | Interactive UI with premium dark-mode design |
+| **Package Manager** | uv | Fast Python dependency management |
+| **Language** | Python 3.14+ | Core application language |
 
 ---
 
@@ -28,35 +44,82 @@ An ultra-modern, high-performance **Modular RAG (Retrieval-Augmented Generation)
 
 ## 📂 Project Architecture & Directory Layout
 
-```directory
+```
 Modular-RAG-Shop-Assistant-Chatbot/
 │
-├── backend/                  # Core Backend REST API
-│   ├── db/                   # Database utilities
-│   │   └── mysql.py          # MySQL Connector connection pool
-│   ├── routes/               # FastAPI route definitions
-│   │   ├── chat.py           # /chat endpoint integrating Gemini RAG
-│   │   └── products.py       # /products catalog fetch endpoint
-│   ├── services/             # Application business logic services
-│   │   ├── gemini_chain.py   # RAG pipeline with Context & Gemini LLM
-│   │   └── vector_store.py   # Pinecone Vector Store initialization
-│   └── main.py               # FastAPI App initialization & Middleware
+├── backend/                      # Core Backend REST API
+│   ├── __init__.py               # Package marker
+│   ├── main.py                   # FastAPI App initialization & Middleware
+│   ├── db/                       # Database utilities
+│   │   ├── __init__.py
+│   │   └── mysql.py              # MySQL Connector connection pool
+│   ├── routes/                   # FastAPI route definitions
+│   │   ├── __init__.py
+│   │   ├── chat.py               # /chat endpoint integrating Gemini RAG
+│   │   └── products.py           # /products catalog fetch endpoint
+│   └── services/                 # Application business logic services
+│       ├── __init__.py
+│       ├── gemini_chain.py       # RAG pipeline with Context & Gemini LLM
+│       └── vector_store.py       # Pinecone Vector Store initialization
 │
-├── frontend/                 # Interactive Streamlit UI
-│   └── app.py                # Streamlit Web App with Premium Custom CSS
+├── frontend/                     # Interactive Streamlit UI
+│   └── app.py                    # Streamlit Web App with Premium Custom CSS
 │
-├── data/                     # Local data storage and seed scripts
-│   ├── shop-product-catalog.csv # Source dataset downloaded from Kaggle
-│   └── data_insertion.py     # MySQL DB ingestion/seeding script
+├── data/                         # Local data storage and seed scripts
+│   ├── shop-product-catalog.csv  # Source dataset (130 products from Kaggle)
+│   └── data_insertion.py         # MySQL DB ingestion/seeding script
 │
-├── embeddings/               # Semantic synchronization
-│   └── sync_pinecone.py      # Pinecone embedding & syncing script
+├── embeddings/                   # Semantic synchronization
+│   └── sync_pinecone.py          # Pinecone embedding & syncing script
 │
-├── main.py                   # Root FastAPI server entry point launcher
-├── pyproject.toml            # Project dependencies & modern UV environment configs
-├── uv.lock                   # Deterministic lockfile for python environment
-├── .gitignore                # Production grade Git ignore definitions
-└── README.md                 # Project documentation (You are here!)
+├── assets/                       # Static assets
+│   └── screenshot.png            # Interface screenshot for README
+│
+├── .devcontainer/                # GitHub Codespaces configuration
+│   └── devcontainer.json         # Auto-setup for cloud dev environments
+│
+├── main.py                       # Root FastAPI server entry point launcher
+├── pyproject.toml                # Project dependencies & UV environment configs
+├── uv.lock                       # Deterministic lockfile for Python environment
+├── .gitignore                    # Production-grade Git ignore definitions
+├── .python-version               # Python version specification (3.14)
+└── README.md                     # Project documentation (You are here!)
+```
+
+---
+
+## 🏗️ System Architecture
+
+```
+┌─────────────────┐     HTTP POST /chat      ┌──────────────────────────┐
+│                 │  ──────────────────────►  │     FastAPI Backend      │
+│   Streamlit     │                          │                          │
+│   Frontend      │     HTTP GET /products   │  ┌────────────────────┐  │
+│   (Port 8501)   │  ──────────────────────► │  │  Routes Layer      │  │
+│                 │                          │  │  • chat.py          │  │
+│  • Product      │  ◄──────────────────────  │  │  • products.py     │  │
+│    Catalog      │     JSON Response        │  └────────┬───────────┘  │
+│  • Chat Sidebar │                          │           │              │
+│  • Filters      │                          │  ┌────────▼───────────┐  │
+└─────────────────┘                          │  │  Services Layer    │  │
+                                             │  │  • gemini_chain.py │  │
+                                             │  │  • vector_store.py │  │
+                                             │  └──┬──────────┬─────┘  │
+                                             │     │          │        │
+                                             └─────┼──────────┼────────┘
+                                                   │          │
+                                    ┌──────────────▼┐   ┌─────▼──────────┐
+                                    │   Pinecone    │   │  Gemini 2.5    │
+                                    │  Vector DB    │   │    Flash       │
+                                    │ (Similarity   │   │  (LLM Response │
+                                    │   Search)     │   │   Generation)  │
+                                    └──────────────┬┘   └────────────────┘
+                                                   │
+                                    ┌──────────────▼─┐
+                                    │     MySQL      │
+                                    │  (Structured   │
+                                    │   Product Data)│
+                                    └────────────────┘
 ```
 
 ---
@@ -196,6 +259,35 @@ To verify system connectivity, check the following endpoints:
 1. **API Health Check**: `GET http://localhost:8000/` returns `{"status": "ok", "message": "Shop Assistant API is running"}`.
 2. **Product Catalog Fetch**: `GET http://localhost:8000/products` returns all seeded MySQL rows as a list.
 3. **Chat Response**: `POST http://localhost:8000/chat` with body `{"query": "Do you have White Adidas shoes?"}` queries Pinecone, retrieves matching items, sends the formatted prompt context to Gemini 2.5 Flash, and returns an expert response seamlessly.
+
+---
+
+## 🌐 Deployment Options
+
+To deploy this project online for live access (e.g., for recruiters or portfolio demonstrations):
+
+### Option 1: Streamlit Community Cloud *(Free — Recommended)*
+- Merge backend logic into the Streamlit app for a single-service deployment
+- Replace local MySQL with a free cloud database ([TiDB Cloud](https://tidbcloud.com/), [PlanetScale](https://planetscale.com/), or [Aiven](https://aiven.io/))
+- Deploy at [share.streamlit.io](https://share.streamlit.io) — get a permanent `*.streamlit.app` URL
+- Pinecone & Gemini APIs work out-of-the-box from cloud
+
+### Option 2: Render.com *(Free Tier)*
+- Deploy FastAPI backend and Streamlit frontend as **two separate web services**
+- Use a free-tier cloud MySQL provider for the database
+- Services auto-sleep after 15 min of inactivity on free tier
+
+### Option 3: Railway.app *(~$5/month)*
+- Built-in **managed MySQL** database — no external DB setup needed
+- Supports multiple services from a single project dashboard
+- Offers custom domain support for professional URLs
+
+### Option 4: Google Cloud Run *(Free Tier Available)*
+- Containerized serverless deployment using Docker
+- Generous free-tier limits for low-traffic portfolio projects
+- Professional `*.run.app` URLs
+
+> **Note**: All cloud deployment options require replacing the `localhost` MySQL connection in `backend/db/mysql.py` with cloud database credentials, and setting API keys as environment variables in the hosting platform's dashboard.
 
 ---
 
